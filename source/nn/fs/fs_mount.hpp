@@ -9,4 +9,10 @@ namespace nn::fs {
         mount: drive to mount to.
     */
     Result MountSdCardForDebug(char const* mount);
+
+    /*
+    Unmounts the given drive.
+    mount: drive to unmount.
+*/
+    void Unmount(const char* mount);
 };
