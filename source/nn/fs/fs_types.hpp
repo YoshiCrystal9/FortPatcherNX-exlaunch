@@ -46,6 +46,7 @@ namespace nn::fs {
         OpenMode_Append = BIT(2),
 
         OpenMode_ReadWrite  = OpenMode_Read | OpenMode_Write,
+        OpenMode_All = OpenMode_ReadWrite | OpenMode_Append
     };
 
     /* Options for reading. TODO: is this an enum? what for? */

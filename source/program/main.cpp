@@ -1,4 +1,5 @@
 #include "lib.hpp"
+#include "logger.cpp"
 
 /* Define hook StubCopyright. Trampoline indicates the original function should be kept. */
 /* HOOK_DEFINE_REPLACE can be used if the original function does not need to be kept. */
