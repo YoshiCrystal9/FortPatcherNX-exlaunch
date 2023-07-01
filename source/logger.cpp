@@ -17,13 +17,13 @@ static constexpr bool s_Enabled = true;
 
 
 namespace impl {
-    nn::os::MutexType s_LogMutex(false);
+    nn::os::MutexType s_LogMutex;
     char s_FormatBuffer[500];
 
     void Log(const char* text, size_t length) {
         CHECK_ENABLED();
         /* Write text to file. */
-        R_ABORT_UNLESS(nn::fs::WriteFile(s_LogFileHandle, s_LogFilePosition, text, length, nn::fs::WriteOption::Flush));
+        R_ABORT_UNLESS(nn::fs::WriteFile(s_LogFileHandle, s_LogFilePosition, text, length, nn::fs::WriteOption::Create(nn::fs::WriteOptionFlag_Flush)));
         /* Move forward position. */
         s_LogFilePosition += length;
     }
@@ -31,6 +31,8 @@ namespace impl {
 
 void Initialize() {
     CHECK_ENABLED();
+    nn::os::InitializeMutex(&impl::s_LogMutex, false, 0);
+
     /* Mount SD card. */
     R_ABORT_UNLESS(nn::fs::MountSdCardForDebug(s_SdCardMount));
 
@@ -49,9 +51,11 @@ void Initialize() {
 void Finalize() {
     CHECK_ENABLED();
     /* Flush, then close the log file. */
-    R_ABORT_UNLESS(nn::fs::WriteOption_Flush(s_LogFileHandle));
+    R_ABORT_UNLESS(nn::fs::FlushFile(s_LogFileHandle));
     nn::fs::CloseFile(s_LogFileHandle);
 
     /* Unmount SD card. */
     nn::fs::Unmount(s_SdCardMount);
+
+    nn::os::FinalizeMutex(&impl::s_LogMutex);
 }
