@@ -33,8 +33,19 @@ namespace nn::diag {
 
     namespace detail {
         void LogImpl(LogMetaData const&, char const*, ...);
+        void VLogImpl(LogMetaData const&, char const*, va_list);
     }
 }
+
+HOOK_DEFINE_REPLACE(LoggingHook) {
+    static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+        VLog(fmt, args)
+            nn::diag::detail::VLogImpl(meta, fmt, args);
+        va_end(args);
+    }
+};
 
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
