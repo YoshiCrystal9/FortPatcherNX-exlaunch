@@ -18,9 +18,23 @@ HOOK_DEFINE_TRAMPOLINE(LoggingThing) {
 
 };
 
-namespace nn::diag::detail {
-    void LogImpl();
-};
+namespace nn::diag {
+
+    struct LogMetaData {
+        int mLineNumber;
+        const char* mFileName;
+        const char* mFunctionName;
+        const char* mModuleName;
+        int field_20;
+        int field_24;
+        char field_28;
+        int field_2C;
+    };
+
+    namespace detail {
+        void LogImpl(LogMetaData const&, char const*, ...);
+    }
+}
 
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
