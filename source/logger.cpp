@@ -23,7 +23,7 @@ namespace impl {
     void Log(const char* text, size_t length) {
         CHECK_ENABLED();
         /* Write text to file. */
-        R_ABORT_UNLESS(nn::fs::WriteFile(s_LogFileHandle, s_LogFilePosition, text, length, nn::fs::WriteOption::Create(nn::fs::WriteOptionFlag_Flush)));
+        R_ABORT_UNLESS(nn::fs::WriteFile(s_LogFileHandle, s_LogFilePosition, text, length, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush)));
         /* Move forward position. */
         s_LogFilePosition += length;
     }
