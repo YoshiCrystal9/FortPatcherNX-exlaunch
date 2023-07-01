@@ -5,6 +5,7 @@
 	"title_id_range_max":	"0x01ffffffffffffff",
 	"main_thread_stack_size":	"0x00100000",
 	"main_thread_priority":	44,
+	"system_resource_size": "0xE00000",
 	"default_cpu_id":	0,
 	"process_category":	0,
 	"is_retail":	true,
