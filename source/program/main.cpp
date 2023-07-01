@@ -18,6 +18,7 @@ HOOK_DEFINE_TRAMPOLINE(StubCopyright) {
 /* Declare function to dynamic link with. */
 namespace nn::oe {
     void SetCopyrightVisibility(bool);
+    Logger::Initialize();
 };
 
 extern "C" void exl_main(void* x0, void* x1) {
