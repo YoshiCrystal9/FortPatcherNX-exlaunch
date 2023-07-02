@@ -1,23 +1,6 @@
 #include "lib.hpp"
 #include "logger.cpp"
 
-HOOK_DEFINE_REPLACE(LoggingHook) {
-    static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
-        va_list args;
-        va_start(args, fmt);
-        logger::VLog(fmt, args);
-        nn::diag::detail::VLogImpl(meta, fmt, args);
-        va_end(args);
-    }
-};
-
-HOOK_DEFINE_TRAMPOLINE(MountRom) {
-    Result Callback(const char* mount) {
-        logger::Initialize();
-        LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(&nn::diag::detail::LogImpl));
-    }
-}
-
 namespace nn::diag {
 
     struct LogMetaData {
@@ -36,6 +19,25 @@ namespace nn::diag {
         void VLogImpl(LogMetaData const&, char const*, va_list);
     }
 }
+
+HOOK_DEFINE_REPLACE(LoggingHook) {
+    static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+        logger::Log("%s:%s:%s:%d\t", meta.mModuleName, meta.mFileName, meta.mFunctionName, meta.mLineNumber);
+        logger::VLog(fmt, args);
+        nn::diag::detail::VLogImpl(meta, fmt, args);
+        va_end(args);
+    }
+};
+
+HOOK_DEFINE_TRAMPOLINE(MountRom) {
+    static Result Callback(const char* mount, void* cache, ulong cacheSize) {
+        logger::Initialize();
+        LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(&nn::diag::detail::LogImpl));
+        return Orig(mount, cache, cacheSize);
+    }
+};
 
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
