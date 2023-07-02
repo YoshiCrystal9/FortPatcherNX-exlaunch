@@ -83,5 +83,12 @@ namespace nn::fs {
         Flush file.
         handle: Handle representing file to flush. 
     */
-   Result FlushFile(FileHandle handle);
+    Result FlushFile(FileHandle handle);
+    /*
+    Mount the romfs.
+    mount: drive to mount to.
+    cache: memory to offer as a cache
+    cacheSize: size of cache memory offered
+*/
+    Result MountRom(char const* mount, void* cache, ulong cacheSize);
 }

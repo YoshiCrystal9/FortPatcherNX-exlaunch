@@ -1,18 +1,22 @@
 #include "lib.hpp"
 #include "logger.cpp"
 
-/* Define hook StubCopyright. Trampoline indicates the original function should be kept. */
-/* HOOK_DEFINE_REPLACE can be used if the original function does not need to be kept. */
-HOOK_DEFINE_TRAMPOLINE(LoggingThing) {
-
-    /* Define the callback for when the function is called. Don't forget to make it static and name it Callback. */
-    static void Callback(bool enabled) {
-
-        /* Call the original function, with the argument always being false. */
-        Orig(false);
+HOOK_DEFINE_REPLACE(LoggingHook) {
+    static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+        logger::VLog(fmt, args);
+        nn::diag::detail::VLogImpl(meta, fmt, args);
+        va_end(args);
     }
-
 };
+
+HOOK_DEFINE_TRAMPOLINE(MountRom) {
+    Result Callback(const char* mount) {
+        logger::Initialize();
+        LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(&nn::diag::detail::LogImpl));
+    }
+}
 
 namespace nn::diag {
 
@@ -33,23 +37,10 @@ namespace nn::diag {
     }
 }
 
-HOOK_DEFINE_REPLACE(LoggingHook) {
-    static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
-        va_list args;
-        va_start(args, fmt);
-        logger::VLog(fmt, args);
-        nn::diag::detail::VLogImpl(meta, fmt, args);
-        va_end(args);
-    }
-};
-
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
     exl::hook::Initialize();
-    logger::Initialize();
-    /* Install the hook at the provided function pointer. Function type is checked against the callback function. */
-    LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(nn::diag::detail::LogImpl));
-    
+    MountRom::InstallAtFuncPtr(nn::fs::MountRom); 
 }
 
 extern "C" NORETURN void exl_exception_entry() {
