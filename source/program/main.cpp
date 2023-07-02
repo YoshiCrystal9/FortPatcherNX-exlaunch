@@ -1,10 +1,6 @@
 #include "lib.hpp"
 #include "logger.cpp"
 
-void main() {
-    Logger::Initialize();
-}
-
 /* Define hook StubCopyright. Trampoline indicates the original function should be kept. */
 /* HOOK_DEFINE_REPLACE can be used if the original function does not need to be kept. */
 HOOK_DEFINE_TRAMPOLINE(LoggingThing) {
@@ -41,8 +37,8 @@ HOOK_DEFINE_REPLACE(LoggingHook) {
     static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
         va_list args;
         va_start(args, fmt);
-        VLog(fmt, args)
-            nn::diag::detail::VLogImpl(meta, fmt, args);
+        logger::VLog(fmt, args);
+        nn::diag::detail::VLogImpl(meta, fmt, args);
         va_end(args);
     }
 };
@@ -50,10 +46,10 @@ HOOK_DEFINE_REPLACE(LoggingHook) {
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
     exl::hook::Initialize();
-
+    logger::Initialize();
     /* Install the hook at the provided function pointer. Function type is checked against the callback function. */
-    LoggingThing::InstallAtFuncPtr(nn::diag::detail::LogImpl);
-
+    LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(nn::diag::detail::LogImpl));
+    
 }
 
 extern "C" NORETURN void exl_exception_entry() {
