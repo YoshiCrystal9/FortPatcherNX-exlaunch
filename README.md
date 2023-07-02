@@ -1,5 +1,5 @@
 # exlaunch-fort
-test
+gets all logging from fortnite for nintendo switch and saves it to a log.txt on the sdcard
 
 # Credit
 - shadowninja108: epic help
