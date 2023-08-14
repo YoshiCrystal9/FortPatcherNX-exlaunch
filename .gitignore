@@ -7,3 +7,6 @@ deploy/*
 *.nso
 *.npdm
 *.sln
+.idea/discord.xml
+.idea/misc.xml
+.idea/vcs.xml
