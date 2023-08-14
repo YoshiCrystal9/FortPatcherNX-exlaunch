@@ -1,5 +1,11 @@
 # exlaunch-fort
-gets all logging from fortnite for nintendo switch and saves it to a log.txt on the sdcard
+Gets all logging from Fortnite for Nintendo Switch and stores it on a log.txt file on the sdcard.
+
+Works on all versions besides 25.11 and 25.20.
+
+Installation:
+
+Drag and drop to the sd card.
 
 # Credit
 - shadowninja108: epic help
