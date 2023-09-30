@@ -7,6 +7,8 @@ Installation:
 
 Drag and drop to the sd card.
 
+##WARNING, IF USED FOR TOO LONG THE GAME WILL CRASH BECAUSE OF THE RAM USAGE!
+
 # Credit
 - shadowninja108: epic help
 - Atmosphère: A great reference and guide.
