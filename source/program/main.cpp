@@ -76,7 +76,7 @@ extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
     exl::hook::Initialize();
     MountRom::InstallAtFuncPtr(nn::fs::MountRom);
-    PatchWhateverString();
+    //PatchWhateverString();
 }
 
 extern "C" NORETURN void exl_exception_entry() {
