@@ -42,7 +42,7 @@ namespace exl::patch {
         inline uintptr_t RoFromAddr(uintptr_t addr) const { return m_Pages.GetRo() + addr; }
         inline uintptr_t RwFromAddr(uintptr_t addr) const { return m_Pages.GetRw() + addr; }
 
-        inline ptrdiff_t AddrFromRoPointer(void* ptr) const { return AddrFromRo(reinterpret_cast<uintptr_t>(ptr)); }
+        inline ptrdiff_t AddrFromRoPointer(const void* ptr) const { return AddrFromRo(reinterpret_cast<uintptr_t>(ptr)); }
         inline ptrdiff_t AddrFromRwPointer(void* ptr) const { return AddrFromRw(reinterpret_cast<uintptr_t>(ptr)); }
     };
 }
