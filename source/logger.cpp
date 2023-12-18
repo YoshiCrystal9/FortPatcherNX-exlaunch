@@ -38,7 +38,7 @@ namespace logger {
         /* Mount SD card. */
         R_ABORT_UNLESS(nn::fs::MountSdCardForDebug(s_SdCardMount));
 
-        /* Try create log file, ignore if it already exists. */
+        /* Try to create log file, ignore if it already exists. */
         auto r = nn::fs::CreateFile(s_LogFilePath, 0);
         if (r != 0x402) /* ResultAlreadyExists. */
             R_ABORT_UNLESS(r);
