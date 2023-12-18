@@ -60,7 +60,7 @@ HOOK_DEFINE_REPLACE(LoggingHook) {
     static void Callback(nn::diag::LogMetaData const& meta, char const* fmt, ...) {
         va_list args;
         va_start(args, fmt);
-        //logger::Log("%s:%s:%s:%d\t", meta.mModuleName, meta.mFileName, meta.mFunctionName, meta.mLineNumber);
+        //logger::Log("%s:%s:%s:%d\t", meta.mModuleName, meta.mFileName, meta.mFunctionName, meta.mLineNumber); //ONLY ENABLE THIS IF YOU WANT THE FILE NAME AND PATH LOGGED AS WELL
         logger::VLog(fmt, args);
         nn::diag::detail::VLogImpl(meta, fmt, args);
         va_end(args);
