@@ -1,10 +1,8 @@
 #include "lib.hpp"
 #include "logger.cpp"
-#include <string.h>
-#include <iostream>
-#include <cstring>
 
-const void* memmem(const void* haystack, size_t haystack_len, const void* needle, size_t needle_len) {
+/*
+ * const void* memmem(const void* haystack, size_t haystack_len, const void* needle, size_t needle_len) {
     if (needle_len == 0) {
         return haystack;
     }
@@ -27,16 +25,17 @@ static constexpr char stringToWrite[] = "farts";
 static void PatchWhateverString() {
     const auto& rodata = exl::util::GetMainModuleInfo().m_Rodata;
     auto foundNativePlatform = memmem(
-        reinterpret_cast<void*>(rodata.m_Start),    /* haystack */
-        rodata.m_Size,                              /* haystack size */
-        stringToFind,                               /* needle */
-        sizeof(stringToFind)                        /* needle size */
+        reinterpret_cast<void*>(rodata.m_Start),    // haystack
+        rodata.m_Size,                              // haystack size
+        stringToFind,                               // needle
+        sizeof(stringToFind)                        // needle size
 );
     exl::patch::RandomAccessPatcher p{};
     auto offset = p.AddrFromRoPointer(foundNativePlatform);
     auto dest = reinterpret_cast<void*>(p.RwFromAddr(offset));
     memcpy(dest, stringToWrite, sizeof(stringToWrite));
 }
+*/
 
 namespace nn::diag {
 
@@ -80,7 +79,7 @@ extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
     exl::hook::Initialize();
     MountRom::InstallAtFuncPtr(nn::fs::MountRom);
-    PatchWhateverString();
+    //PatchWhateverString();
 }
 
 extern "C" NORETURN void exl_exception_entry() {
