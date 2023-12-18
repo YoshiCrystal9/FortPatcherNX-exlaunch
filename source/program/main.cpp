@@ -1,8 +1,5 @@
 #include "lib.hpp"
 #include "logger.cpp"
-#include <string>
-#include "config.hpp"
-#include "../../include/toml.hpp"
 
 /*
  * const void* memmem(const void* haystack, size_t haystack_len, const void* needle, size_t needle_len) {
@@ -40,8 +37,6 @@ static void PatchWhateverString() {
 }
 */
 
-PatchConfig global_config;
-
 namespace nn::diag {
 
     struct LogMetaData {
@@ -74,33 +69,16 @@ HOOK_DEFINE_REPLACE(LoggingHook) {
 
 HOOK_DEFINE_TRAMPOLINE(MountRom) {
     static Result Callback(const char* mount, void* cache, ulong cacheSize) {
-        EXL_ASSERT(global_config.initialized);
-        if (global_config.logging.active) {
-            logger::Initialize();
-            LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(&nn::diag::detail::LogImpl));
-        };
+        logger::Initialize();
+        LoggingHook::InstallAtPtr(reinterpret_cast<uintptr_t>(&nn::diag::detail::LogImpl));
         return Orig(mount, cache, cacheSize);
-    };
+    }
 };
-
-static void hi()
-{
-    R_ABORT_UNLESS(nn::fs::MountSdCardForDebug("sd"));
-    std::string config_str;
-    auto r = nn::fs::CreateFile("sd:/config/FortPatcher-NX/config.toml", 0);
-    if (r != 0x402) /* ResultAlreadyExists. */
-        R_ABORT_UNLESS(r);
-    auto config = toml::parse(config_str);
-    EXL_ASSERT(config);
-    global_config.from_table(config);
-};
-
 
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
     exl::hook::Initialize();
     MountRom::InstallAtFuncPtr(nn::fs::MountRom);
-    hi();
     //PatchWhateverString();
 }
 
