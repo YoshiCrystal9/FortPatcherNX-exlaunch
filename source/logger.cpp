@@ -5,7 +5,7 @@
 
 namespace logger {
     static constinit char s_SdCardMount[] = "sd";
-    static constinit char s_LogFilePath[] = "sd:/log.txt";
+    static constinit char s_LogFilePath[] = "sd:/fort_log.txt";
 
     static long s_LogFilePosition = 0;
     static nn::fs::FileHandle s_LogFileHandle;
