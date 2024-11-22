@@ -7,6 +7,8 @@ Installation:
 
 Drag and drop to the sd card.
 
+no longer works on new versions
+
 ## WARNING, IF USED FOR TOO LONG THE GAME WILL CRASH BECAUSE OF THE RAM USAGE!
 
 # Credit
